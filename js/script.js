@@ -5,14 +5,61 @@ class Trello {
 
   events() {
     this.surface.addEventListener('mousedown', (e) => this.catchItem(e))
-    // this.surface.addEventListener('mouseover', (e) => this.onMouseOver(e))
+    this.surface.addEventListener('submit', (e) => this.addTask(e))
+    // this.surface.addEventListener('click', (e) => this.closeTask(e))
+    this.surface.addEventListener('submit', (e) => this.addSurfaceBox(e))
   }
 
-  onMouseOver(e) {
-    if (e.target.closest('.surface__box')) {
-      console.log(e.target.closest('.surface__box'));
+  addSurfaceBox(e) {
+    e.preventDefault()
+    if (e.target.closest('.surface__add-box-form')) {
+      const newColumn = document.createElement('div')
+      newColumn.classList.add('surface__box')
+      newColumn.innerHTML = `
+        <div class="surface__head">${e.target.closest('.surface__add-box-form').querySelector('.surface__add-box-input').value}</div>
+        <div class="list"></div>
+        <form action="" class="surface__form">
+          <input type="text" class="surface__input" placeholder="Add task">
+        </form>
+      `
+      e.target.closest('.surface__add-box-form').insertAdjacentElement('beforebegin', newColumn)
+      e.target.closest('.surface__add-box-form').querySelector('.surface__add-box-input').value = ''
     }
   }
+
+  addTask(e) {
+    e.preventDefault()
+    if (e.target.closest('.surface__form')) {
+      // console.log(e.target.closest('.surface__form').querySelector('.surface__input').value);
+      const newTask = document.createElement('div')
+      newTask.classList.add('task')
+      newTask.innerHTML = `
+        <div class="task__content">${e.target.closest('.surface__form').querySelector('.surface__input').value}</div>
+      `
+      e.target.closest('.surface__box').querySelector('.list').append(newTask)
+      e.target.closest('.surface__form').querySelector('.surface__input').value = ''
+    }
+  }
+
+
+  // <div class="task__change"></div>
+  // <div class="task__close"></div>
+
+  // changeTask(e) {
+  //   if (e.target.closest('.task__change')) {
+  //     e.target.closest('.task').querySelector('.task__content').innerHTML = `
+  //       <form action="" class="surface__form">
+  //         <input type="text" class="surface__input" placeholder="Add task">
+  //       </form>
+  //     `
+  //   }
+  // }
+
+  // closeTask(e) {
+  //   if (e.target.closest('.task__close')) {
+  //     e.target.closest('.task').remove()
+  //   }
+  // }
 
   catchItem(e) {
     if (e.target.closest('.task')) {
@@ -36,6 +83,7 @@ class Trello {
       }
 
       function onMouseOver(event) {
+        // console.log(background.clientHeight);
         if (event.target.closest('.surface__box')) {
           console.log(event.target.closest('.surface__box'));
           event.target.closest('.surface__box').querySelector('.list').append(task)
@@ -46,15 +94,14 @@ class Trello {
       function onMouseUp(event) {
         document.removeEventListener('mousemove', onMouseMove);
 
-        // if (background.clientHeight > 0) {
-        background.remove()
-        task.style.position = 'relative';
-        task.style.top = 'auto'
-        task.style.left = 'auto'
-        task.style.zIndex = 'auto';
+        if (background.clientHeight > 0) {
 
-
-        // }
+          background.remove()
+          task.style.position = 'relative';
+          task.style.top = 'auto'
+          task.style.left = 'auto'
+          task.style.zIndex = 'auto';
+        }
         document.onmouseup = null
       }
 

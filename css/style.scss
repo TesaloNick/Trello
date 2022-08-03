@@ -25,7 +25,8 @@ body {
 
 .surface {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, 300px);
+  align-items: flex-start;
   gap: 14px;
 
   &__box {
@@ -50,13 +51,27 @@ body {
   }
 
   &__form {
-    // width: 100%;
   }
 
   &__input {
     background-color: transparent;
     width: 100%;
     padding: 5px;
+    font-size: 20px;
+    border-radius: 3px;
+  }
+
+  &__add-box-form {
+    width: 100%;
+    padding: 10px;
+    background-color: #ebecf0;
+    border-radius: 3px;
+  }
+
+  &__add-box-input {
+    width: 100%;
+    padding: 5px;
+    background-color: transparent;
     font-size: 20px;
   }
 }
@@ -73,10 +88,23 @@ body {
   padding: 5px;
   box-shadow: 0 1px 0 #091e4240;
   cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 20px 20px;
+  gap: 10px;
 
   &__content {
   }
 
   &__change {
+    width: 20px;
+    height: 20px;
+    background-image: url(../img/edit.svg);
+    background-size: cover;
+  }
+  &__close {
+    width: 20px;
+    height: 20px;
+    background-image: url(../img/close.svg);
+    background-size: cover;
   }
 }
