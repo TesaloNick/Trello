@@ -33,15 +33,16 @@ body {
 .surface {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (300px)[auto-fill];
-      grid-template-columns: repeat(auto-fill, 300px);
+  -ms-grid-columns: (300px)[auto-fill] 300px;
+      grid-template-columns: repeat(auto-fill, 300px) 300px;
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
-  gap: 14px;
+  gap: 15px;
 }
 
-.surface__box {
+.surface__column {
+  display: inline-block;
   padding: 10px;
   border-radius: 3px;
   background-color: #ebecf0;
@@ -59,7 +60,7 @@ body {
   font-weight: bold;
 }
 
-.surface__input {
+.surface__task-input {
   background-color: transparent;
   width: 100%;
   padding: 5px;
@@ -67,14 +68,15 @@ body {
   border-radius: 3px;
 }
 
-.surface__add-box-form {
-  width: 100%;
+.surface__add-column-form {
+  display: inline-block;
+  width: 300px;
   padding: 10px;
   background-color: #ebecf0;
   border-radius: 3px;
 }
 
-.surface__add-box-input {
+.surface__add-column-input {
   width: 100%;
   padding: 5px;
   background-color: transparent;

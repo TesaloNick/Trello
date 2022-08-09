@@ -24,12 +24,25 @@ body {
 }
 
 .surface {
+  // display: flex;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 300px);
+  // flex-direction: row;
+  grid-template-columns: repeat(auto-fill, 300px) 300px;
+  // flex-wrap: wrap;
+  // justify-items: flex-start;
   align-items: flex-start;
-  gap: 14px;
+  gap: 15px;
 
-  &__box {
+  &__columns {
+    // display: inline-block;
+    // display: grid;
+    // grid-template-columns: repeat(auto-fill, 300px);
+    // align-items: flex-start;
+    // gap: 15px;
+  }
+
+  &__column {
+    display: inline-block;
     padding: 10px;
     border-radius: 3px;
     background-color: #ebecf0;
@@ -37,23 +50,15 @@ body {
     flex-direction: column;
     gap: 10px;
   }
-  &__backlog {
-  }
 
   &__head {
     font-weight: bold;
   }
 
-  &__in-progress {
+  &__task-form {
   }
 
-  &__done {
-  }
-
-  &__form {
-  }
-
-  &__input {
+  &__task-input {
     background-color: transparent;
     width: 100%;
     padding: 5px;
@@ -61,14 +66,15 @@ body {
     border-radius: 3px;
   }
 
-  &__add-box-form {
-    width: 100%;
+  &__add-column-form {
+    display: inline-block;
+    width: 300px;
     padding: 10px;
     background-color: #ebecf0;
     border-radius: 3px;
   }
 
-  &__add-box-input {
+  &__add-column-input {
     width: 100%;
     padding: 5px;
     background-color: transparent;
