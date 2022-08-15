@@ -11,6 +11,7 @@ class Trello {
     this.surface.addEventListener('mousedown', (e) => this.catchItem(e))
     this.surface.addEventListener('submit', (e) => this.addTask(e))
     this.surface.addEventListener('click', (e) => this.closeTask(e))
+    this.surface.addEventListener('click', (e) => this.changeTask(e))
     this.surface.addEventListener('submit', (e) => this.addColumn(e))
   }
 
@@ -25,16 +26,17 @@ class Trello {
       const columnBox = document.createElement('div')
       columnBox.classList.add('surface__column')
       columnBox.id = column.id
+      console.log(column.tasks);
       columnBox.innerHTML = `
       <div class="surface__head">${column.head}</div>
       <div class="list">
-      ${column.tasks.map(item => `
-        <div class='task' id=${item.id}>
-          <div class="task__content">${item.content}</div>
-          <div class="task__change"></div>
-          <div class="task__close"></div>
-        </div>
-      `)} 
+        ${column.tasks.map(item => `
+          <div class='task' id=${item.id}>
+            <div class="task__content">${item.content}</div>
+            <div class="task__change"></div>
+            <div class="task__close"></div>
+          </div>
+        `).join('')} 
       </div>
       <form action="" class="surface__task-form">
         <input type="text" class="surface__task-input" placeholder="Add task">
@@ -79,15 +81,16 @@ class Trello {
     }
   }
 
-  // changeTask(e) {
-  //   if (e.target.closest('.task__change')) {
-  //     e.target.closest('.task').querySelector('.task__content').innerHTML = `
-  //       <form action="" class="surface__task-form">
-  //         <input type="text" class="surface__task-input" placeholder="Add task">
-  //       </form>
-  //     `
-  //   }
-  // }
+  changeTask(e) {
+    if (e.target.closest('.task__change')) {
+      this.tasks.map(column => {
+        if (e.target.closest('.surface__column').id = column.id) {
+
+        }
+      })
+
+    }
+  }
 
   closeTask(e) {
     if (e.target.closest('.task__close')) {
@@ -103,53 +106,53 @@ class Trello {
   }
 
   catchItem(e) {
-    // if (e.target.closest('.task')) {
-    //   let task = e.target.closest('.task')
-    //   let background = document.createElement('div')
-    //   let shiftY = e.clientY - task.getBoundingClientRect().top;
-    //   let shiftX = e.clientX - task.getBoundingClientRect().left;
+    if (e.target.closest('.task')) {
+      let task = e.target.closest('.task')
+      let background = document.createElement('div')
+      let shiftY = e.clientY - task.getBoundingClientRect().top;
+      let shiftX = e.clientX - task.getBoundingClientRect().left;
 
-    //   function onMouseMove(event) {
-    //     background.style.height = task.clientHeight + 'px'
-    //     background.style.width = task.clientWidth + 'px'
-    //     background.style.borderRadius = '3px'
-    //     background.style.backgroundColor = '#bfbfbf'
-    //     task.insertAdjacentElement('afterend', background)
+      let onMouseMove = function (event) {
+        background.style.height = task.clientHeight + 'px'
+        background.style.width = task.clientWidth + 'px'
+        background.style.borderRadius = '3px'
+        background.style.backgroundColor = '#bfbfbf'
+        task.insertAdjacentElement('afterend', background)
 
-    //     task.style.position = 'absolute';
-    //     task.style.zIndex = 1000;
-    //     task.style.width = task.closest('.list').clientWidth + 'px'
-    //     task.style.top = event.pageY - shiftY + 'px';
-    //     task.style.left = event.pageX - shiftX + 'px';
-    //   }
+        task.style.position = 'absolute';
+        task.style.zIndex = 1000;
+        task.style.width = task.closest('.list').clientWidth + 'px'
+        task.style.top = event.pageY - shiftY + 'px';
+        task.style.left = event.pageX - shiftX + 'px';
 
-    //   function onMouseOver(event) {
-    //     // console.log(background.clientHeight);
-    //     if (event.target.closest('.surface__column')) {
-    //       console.log(event.target.closest('.surface__column'));
-    //       event.target.closest('.surface__column').querySelector('.list').append(task)
-    //     }
-    //     document.onmouseover = null
-    //   }
+        function onMouseOver(event) {
+          if (event.target.closest('.surface__column')) {
+            // console.log(event.target.closest('.surface__column'));
+            event.target.closest('.surface__column').querySelector('.list').append(task)
+          }
+          document.onmouseover = null
+        }
 
-    //   function onMouseUp(event) {
-    //     document.removeEventListener('mousemove', onMouseMove);
+        document.onmouseover = onMouseOver.bind(this)
+      }
 
-    //     if (background.clientHeight > 0) {
+      function onMouseUp(event) {
+        document.removeEventListener('mousemove', onMouseMove);
+        if (background.clientHeight > 0) {
+          background.remove()
+          task.style.position = 'relative';
+          task.style.top = 'auto'
+          task.style.left = 'auto'
+          task.style.zIndex = 'auto';
+        }
+        // localStorage.setItem('tasks', JSON.stringify(this.tasks))   // перезапись localStorage
 
-    //       background.remove()
-    //       task.style.position = 'relative';
-    //       task.style.top = 'auto'
-    //       task.style.left = 'auto'
-    //       task.style.zIndex = 'auto';
-    //     }
-    //     document.onmouseup = null
-    //   }
+        document.onmouseup = null
+      }
 
-    //   document.addEventListener('mousemove', onMouseMove)
-    //   document.onmouseup = onMouseUp.bind(this)
-    //   document.onmouseover = onMouseOver.bind(this)
-    // }
+      document.onmouseup = onMouseUp.bind(this)
+      document.addEventListener('mousemove', onMouseMove)
+    }
   }
 }
 
