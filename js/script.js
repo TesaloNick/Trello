@@ -4,6 +4,7 @@ class Trello {
     this.formAddColumn = document.querySelector('.surface__add-column-form')
     this.tasks = JSON.parse(localStorage.getItem('tasks')) || []
     this.counterColumns = JSON.parse(localStorage.getItem('counterColumns')) || 0
+    this.events()
   }
 
   events() {
@@ -26,7 +27,6 @@ class Trello {
       const columnBox = document.createElement('div')
       columnBox.classList.add('surface__column')
       columnBox.id = column.id
-      console.log(column.tasks);
       columnBox.innerHTML = `
       <div class="surface__head">${column.head}</div>
       <div class="list">
@@ -111,6 +111,7 @@ class Trello {
       let background = document.createElement('div')
       let shiftY = e.clientY - task.getBoundingClientRect().top;
       let shiftX = e.clientX - task.getBoundingClientRect().left;
+      // console.log(task.id);
 
       let onMouseMove = function (event) {
         background.style.height = task.clientHeight + 'px'
@@ -125,15 +126,6 @@ class Trello {
         task.style.top = event.pageY - shiftY + 'px';
         task.style.left = event.pageX - shiftX + 'px';
 
-        function onMouseOver(event) {
-          if (event.target.closest('.surface__column')) {
-            // console.log(event.target.closest('.surface__column'));
-            event.target.closest('.surface__column').querySelector('.list').append(task)
-          }
-          document.onmouseover = null
-        }
-
-        document.onmouseover = onMouseOver.bind(this)
       }
 
       function onMouseUp(event) {
@@ -144,8 +136,23 @@ class Trello {
           task.style.top = 'auto'
           task.style.left = 'auto'
           task.style.zIndex = 'auto';
+
+          function onMouseOver(event) {
+            let targetObject = null
+            if (event.target.closest('.surface__column')) {
+              this.tasks.map(column => {
+                if (column.id === task.closest('.surface__column').id) {
+                  column.tasks.filter(item => item.id !== task.id)
+                }
+              })
+              console.log(event.target.closest('.surface__column').id, task.closest('.surface__column').id);
+              event.target.closest('.surface__column').querySelector('.list').append(task)
+            }
+            console.log(this.tasks);
+            document.onmouseover = null
+          }
+          document.onmouseover = onMouseOver.bind(this)
         }
-        // localStorage.setItem('tasks', JSON.stringify(this.tasks))   // перезапись localStorage
 
         document.onmouseup = null
       }
@@ -157,4 +164,3 @@ class Trello {
 }
 
 let trello = new Trello();
-trello.events()
