@@ -42,10 +42,6 @@ body {
     gap: 10px;
   }
 
-  &__head {
-    font-weight: bold;
-  }
-
   &__task-form {
   }
 
@@ -72,7 +68,22 @@ body {
     font-size: 20px;
   }
 }
+.head {
+  display: flex;
+  justify-content: space-between;
+  &__content {
+    font-weight: bold;
+  }
 
+  &__close {
+    width: 20px;
+    height: 20px;
+    background-image: url(../img/close.svg);
+    background-size: cover;
+    position: relative;
+    cursor: pointer;
+  }
+}
 .list {
   display: flex;
   flex-direction: column;

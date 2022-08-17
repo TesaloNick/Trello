@@ -56,10 +56,6 @@ body {
   gap: 10px;
 }
 
-.surface__head {
-  font-weight: bold;
-}
-
 .surface__task-input {
   background-color: transparent;
   width: 100%;
@@ -81,6 +77,28 @@ body {
   padding: 5px;
   background-color: transparent;
   font-size: 20px;
+}
+
+.head {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.head__content {
+  font-weight: bold;
+}
+
+.head__close {
+  width: 20px;
+  height: 20px;
+  background-image: url(../img/close.svg);
+  background-size: cover;
+  position: relative;
+  cursor: pointer;
 }
 
 .list {
