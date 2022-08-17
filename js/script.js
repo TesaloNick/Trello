@@ -33,7 +33,6 @@ class Trello {
         ${column.tasks.map(item => `
           <div class='task' id=${item.id}>
             <div class="task__content">${item.content}</div>
-            <div class="task__change"></div>
             <div class="task__close"></div>
           </div>
         `).join('')} 
@@ -132,6 +131,7 @@ class Trello {
         document.removeEventListener('mousemove', onMouseMove);
         if (background.clientHeight > 0) {
           background.remove()
+          document.onmouseover = onMouseOver.bind(this)
           task.style.position = 'relative';
           task.style.top = 'auto'
           task.style.left = 'auto'
@@ -140,18 +140,29 @@ class Trello {
           function onMouseOver(event) {
             let targetObject = null
             if (event.target.closest('.surface__column')) {
-              this.tasks.map(column => {
-                if (column.id === task.closest('.surface__column').id) {
-                  column.tasks.filter(item => item.id !== task.id)
-                }
-              })
-              console.log(event.target.closest('.surface__column').id, task.closest('.surface__column').id);
-              event.target.closest('.surface__column').querySelector('.list').append(task)
+              this.tasks = this.tasks.map(column => task.closest('.surface__column').id === column.id ?
+                {
+                  ...column, tasks: column.tasks.filter(item => {
+                    if (item.id !== task.id) {
+                      return item.id !== task.id
+                    } else {
+                      targetObject = item
+                    }
+                  })
+                } :
+                column
+              )
+
+              this.tasks = this.tasks.map(column => event.target.closest('.surface__column').id === column.id ?
+                { ...column, tasks: [...column.tasks, targetObject] } :
+                column
+              )
+
+              this.printTasks(this.tasks)
+              // event.target.closest('.surface__column').querySelector('.list').append(task)
             }
-            console.log(this.tasks);
             document.onmouseover = null
           }
-          document.onmouseover = onMouseOver.bind(this)
         }
 
         document.onmouseup = null
