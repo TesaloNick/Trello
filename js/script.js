@@ -25,7 +25,7 @@ class Trello {
   printTasks(tasks) {
     this.surface.innerHTML = `
     <form action="" class="surface__add-column-form">
-      <input type="text" class="surface__add-column-input" placeholder="Add column">
+      <input type="text" class="surface__add-column-input" placeholder="+ Add column" required>
     </form> 
     `
 
@@ -48,7 +48,7 @@ class Trello {
         `).join('')} 
       </div>
       <form action="" class="surface__task-form">
-        <input type="text" class="surface__task-input" placeholder="Add task">
+        <input type="text" class="surface__task-input" placeholder="+ Add task" required>
       </form>
       `
 
@@ -120,7 +120,7 @@ class Trello {
       const inputForChanging = e.target.closest('.task').querySelector('.task__content')
       inputForChanging.style.height = e.target.closest('.task__content').offsetHeight + 'px'
       inputForChanging.innerHTML = `
-          <input type = "text" class="task__new-text" value = '${inputForChanging.textContent}'>
+          <input type = "text" class="task__new-text" value = '${inputForChanging.textContent}' required>
         `
       inputForChanging.querySelector('.task__new-text').focus()
     }
