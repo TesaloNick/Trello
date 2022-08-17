@@ -24,21 +24,12 @@ body {
 }
 
 .surface {
-  // display: flex;
   display: grid;
-  // flex-direction: row;
   grid-template-columns: repeat(auto-fill, 300px) 300px;
-  // flex-wrap: wrap;
-  // justify-items: flex-start;
   align-items: flex-start;
   gap: 15px;
 
   &__columns {
-    // display: inline-block;
-    // display: grid;
-    // grid-template-columns: repeat(auto-fill, 300px);
-    // align-items: flex-start;
-    // gap: 15px;
   }
 
   &__column {
@@ -95,11 +86,21 @@ body {
   box-shadow: 0 1px 0 #091e4240;
   cursor: pointer;
   display: grid;
-  grid-template-columns: 1fr 20px;
-  // grid-template-columns: 1fr 20px 20px;
+  grid-template-columns: 1fr 20px 20px;
   gap: 10px;
 
   &__content {
+    // height: auto;
+  }
+
+  &__new-text {
+    // background-color: rgb(230, 230, 230);
+    font-size: 20px;
+    line-height: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 100%;
   }
 
   &__change {

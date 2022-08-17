@@ -103,9 +103,22 @@ body {
   cursor: pointer;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 20px;
-      grid-template-columns: 1fr 20px;
+  -ms-grid-columns: 1fr 20px 20px;
+      grid-template-columns: 1fr 20px 20px;
   gap: 10px;
+}
+
+.task__new-text {
+  font-size: 20px;
+  line-height: 1;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100%;
 }
 
 .task__change {

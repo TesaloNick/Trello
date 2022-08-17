@@ -13,6 +13,9 @@ class Trello {
     this.surface.addEventListener('submit', (e) => this.addTask(e))
     this.surface.addEventListener('click', (e) => this.closeTask(e))
     this.surface.addEventListener('click', (e) => this.changeTask(e))
+    this.surface.addEventListener('keypress', (e) => this.changeTask(e))
+    this.surface.addEventListener('click', (e) => this.addInputForChanging(e))
+    this.surface.addEventListener('dblclick', (e) => this.addInputForChanging(e));
     this.surface.addEventListener('submit', (e) => this.addColumn(e))
   }
 
@@ -33,6 +36,7 @@ class Trello {
         ${column.tasks.map(item => `
           <div class='task' id=${item.id}>
             <div class="task__content">${item.content}</div>
+            <div class="task__change"></div>
             <div class="task__close"></div>
           </div>
         `).join('')} 
@@ -81,13 +85,30 @@ class Trello {
   }
 
   changeTask(e) {
-    if (e.target.closest('.task__change')) {
-      this.tasks.map(column => {
-        if (e.target.closest('.surface__column').id = column.id) {
+    if (e.type === 'keypress' && e.key === "Enter" && e.target.closest('.task__content')) {
+      e.preventDefault();
+      this.tasks = this.tasks.map(column => e.target.closest('.surface__column').id === column.id ?
+        {
+          ...column, tasks: column.tasks.map(item => e.target.closest('.task').id === item.id ?
+            { ...item, content: e.target.value } :
+            item)
+        } :
+        column
+      )
 
-        }
-      })
+      this.printTasks(this.tasks)
+      localStorage.setItem('tasks', JSON.stringify(this.tasks))
+    }
+  }
 
+  addInputForChanging(e) {
+    if ((e.target.closest('.task__content') && e.type === 'dblclick') || (e.target.closest('.task__change') && e.type === 'click')) {
+      const inputForChanging = e.target.closest('.task').querySelector('.task__content')
+      inputForChanging.style.height = e.target.closest('.task__content').offsetHeight + 'px'
+      inputForChanging.innerHTML = `
+          <input type = "text" class="task__new-text" value = '${inputForChanging.textContent}'>
+        `
+      inputForChanging.querySelector('.task__new-text').focus()
     }
   }
 
@@ -110,7 +131,6 @@ class Trello {
       let background = document.createElement('div')
       let shiftY = e.clientY - task.getBoundingClientRect().top;
       let shiftX = e.clientX - task.getBoundingClientRect().left;
-      // console.log(task.id);
 
       let onMouseMove = function (event) {
         background.style.height = task.clientHeight + 'px'
