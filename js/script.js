@@ -111,14 +111,14 @@ class Trello {
       )
 
       this.printTasks(this.tasks)
-      localStorage.setItem('tasks', JSON.stringify(this.tasks))
+      // localStorage.setItem('tasks', JSON.stringify(this.tasks))
     }
   }
 
   addInputForChanging(e) {
     if ((e.target.closest('.task__content') && e.type === 'dblclick') || (e.target.closest('.task__change') && e.type === 'click')) {
       const inputForChanging = e.target.closest('.task').querySelector('.task__content')
-      inputForChanging.style.height = e.target.closest('.task__content').offsetHeight + 'px'
+      inputForChanging.style.height = e.target.closest('.task').querySelector('.task__content').offsetHeight + 'px'
       inputForChanging.innerHTML = `
           <input type = "text" class="task__new-text" value = '${inputForChanging.textContent}' required>
         `
