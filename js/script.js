@@ -1,15 +1,18 @@
+
+
+
 class Trello {
   constructor() {
     this.surface = document.querySelector('.surface')
     this.formAddColumn = document.querySelector('.surface__add-column-form')
     this.tasks = JSON.parse(localStorage.getItem('tasks')) || []
     this.counterColumns = JSON.parse(localStorage.getItem('counterColumns')) || 0
-    this.events()
+    // this.events()
   }
 
   events() {
     this.printTasks(this.tasks)
-    this.surface.addEventListener('mousedown', (e) => this.catchItem(e))
+    // this.surface.addEventListener('mousedown', (e) => this.catchItem(e))
     this.surface.addEventListener('submit', (e) => this.addTask(e))
     this.surface.addEventListener('click', (e) => {
       this.closeTask(e)
@@ -111,7 +114,7 @@ class Trello {
       )
 
       this.printTasks(this.tasks)
-      // localStorage.setItem('tasks', JSON.stringify(this.tasks))
+      localStorage.setItem('tasks', JSON.stringify(this.tasks))
     }
   }
 
@@ -139,73 +142,166 @@ class Trello {
     }
   }
 
-  catchItem(e) {
-    if (e.target.closest('.task')) {
-      let task = e.target.closest('.task')
-      let background = document.createElement('div')
-      let shiftY = e.clientY - task.getBoundingClientRect().top;
-      let shiftX = e.clientX - task.getBoundingClientRect().left;
+  // catchItem(e) {
+  //   if (e.target.closest('.task')) {
+  //     let task = e.target.closest('.task')
+  //     let background = document.createElement('div')
+  //     let shiftY = e.clientY - task.getBoundingClientRect().top;
+  //     let shiftX = e.clientX - task.getBoundingClientRect().left;
 
-      let onMouseMove = function (event) {
-        background.style.height = task.clientHeight + 'px'
-        background.style.width = task.clientWidth + 'px'
-        background.style.borderRadius = '3px'
-        background.style.backgroundColor = '#bfbfbf'
-        task.insertAdjacentElement('afterend', background)
+  //     let onMouseMove = function (event) {
+  //       background.style.height = task.clientHeight + 'px'
+  //       background.style.width = task.clientWidth + 'px'
+  //       background.style.borderRadius = '3px'
+  //       background.style.backgroundColor = '#bfbfbf'
+  //       task.insertAdjacentElement('afterend', background)
 
-        task.style.position = 'absolute';
-        task.style.zIndex = 1000;
-        task.style.width = task.closest('.list').clientWidth + 'px'
-        task.style.top = event.pageY - shiftY + 'px';
-        task.style.left = event.pageX - shiftX + 'px';
+  //       task.style.position = 'absolute';
+  //       task.style.zIndex = 1000;
+  //       task.style.width = task.closest('.list').clientWidth + 'px'
+  //       task.style.top = event.pageY - shiftY + 'px';
+  //       task.style.left = event.pageX - shiftX + 'px';
 
-      }
+  //     }
 
-      function onMouseUp(event) {
-        document.removeEventListener('mousemove', onMouseMove);
-        if (background.clientHeight > 0) {
-          background.remove()
-          document.onmouseover = onMouseOver.bind(this)
-          task.style.position = 'relative';
-          task.style.top = 'auto'
-          task.style.left = 'auto'
-          task.style.zIndex = 'auto';
+  //     function onMouseUp(event) {
+  //       document.removeEventListener('mousemove', onMouseMove);
+  //       if (background.clientHeight > 0) {
+  //         background.remove()
+  //         document.onmouseover = onMouseOver.bind(this)
+  //         task.style.position = 'relative';
+  //         task.style.top = 'auto'
+  //         task.style.left = 'auto'
+  //         task.style.zIndex = 'auto';
 
-          function onMouseOver(event) {
-            let targetObject = null
-            if (event.target.closest('.surface__column')) {
-              this.tasks = this.tasks.map(column => task.closest('.surface__column').id === column.id ?
-                {
-                  ...column, tasks: column.tasks.filter(item => {
-                    if (item.id !== task.id) {
-                      return item.id !== task.id
-                    } else {
-                      targetObject = item
-                    }
-                  })
-                } :
-                column
-              )
+  //         function onMouseOver(event) {
+  //           let targetObject = null
+  //           if (event.target.closest('.surface__column')) {
+  //             this.tasks = this.tasks.map(column => task.closest('.surface__column').id === column.id ?
+  //               {
+  //                 ...column, tasks: column.tasks.filter(item => {
+  //                   if (item.id !== task.id) {
+  //                     return item.id !== task.id
+  //                   } else {
+  //                     targetObject = item
+  //                   }
+  //                 })
+  //               } :
+  //               column
+  //             )
 
-              this.tasks = this.tasks.map(column => event.target.closest('.surface__column').id === column.id ?
-                { ...column, tasks: [...column.tasks, targetObject] } :
-                column
-              )
+  //             this.tasks = this.tasks.map(column => event.target.closest('.surface__column').id === column.id ?
+  //               { ...column, tasks: [...column.tasks, targetObject] } :
+  //               column
+  //             )
 
-              this.printTasks(this.tasks)
-              // event.target.closest('.surface__column').querySelector('.list').append(task)
-            }
-            document.onmouseover = null
-          }
-        }
+  //             this.printTasks(this.tasks)
+  //           }
+  //           document.onmouseover = null
+  //         }
+  //       }
 
-        document.onmouseup = null
-      }
+  //       document.onmouseup = null
+  //     }
 
-      document.onmouseup = onMouseUp.bind(this)
-      document.addEventListener('mousemove', onMouseMove)
+  //     document.onmouseup = onMouseUp.bind(this)
+  //     document.addEventListener('mousemove', onMouseMove)
+  //   }
+  // }
+}
+
+class DND extends Trello {
+  constructor() {
+    super()
+    this.task = null
+    this.background = null
+    this.shiftY = null
+    this.shiftX = null
+    this.eventMove = null
+    this.eventUp = null
+    this.eventOver = null
+    this.events()
+  }
+
+  events() {
+    super.events()
+    this.surface.addEventListener('mousedown', (e) => this.onMouseDown(e))
+  }
+
+  onMouseDown(event) {
+    if (event.target.closest('.task')) {
+      this.task = event.target.closest('.task')
+      this.background = document.createElement('div')
+      this.shiftY = event.clientY - this.task.getBoundingClientRect().top;
+      this.shiftX = event.clientX - this.task.getBoundingClientRect().left;
+
+      this.eventUp = this.onMouseUp.bind(this)
+      document.addEventListener('mouseup', this.eventUp)
+      // document.addEventListener('mouseup', this.onMouseUp.bind(this))
+      this.eventMove = this.onMouseMove.bind(this)
+      document.addEventListener('mousemove', this.eventMove)
+      // document.addEventListener('mousemove', this.onMouseMove.bind(this))
     }
+  }
+
+  onMouseMove(event) {
+
+    this.background.style.height = this.task.clientHeight + 'px'
+    this.background.style.width = this.task.clientWidth + 'px'
+    this.background.style.borderRadius = '3px'
+    this.background.style.backgroundColor = '#bfbfbf'
+    this.task.insertAdjacentElement('afterend', this.background)
+
+    this.task.style.position = 'absolute';
+    this.task.style.zIndex = 1000;
+    this.task.style.width = this.task.closest('.list').clientWidth + 'px'
+    this.task.style.top = event.pageY - this.shiftY + 'px';
+    this.task.style.left = event.pageX - this.shiftX + 'px';
+  }
+
+  onMouseUp(event) {
+    document.removeEventListener('mousemove', this.eventMove);
+    // document.removeEventListener('mousemove', this.onMouseMove.bind(this));
+    if (this.background.clientHeight > 0) {
+      this.background.remove()
+      this.eventOver = this.onMouseOver.bind(this)
+      document.addEventListener('mouseover', this.eventOver)
+      // document.addEventListener('mouseover', this.onMouseOver.bind(this))
+      this.task.style.position = 'relative';
+      this.task.style.top = 'auto'
+      this.task.style.left = 'auto'
+      this.task.style.zIndex = 'auto';
+    }
+
+    document.removeEventListener('mouseup', this.eventUp)
+  }
+
+  onMouseOver(event) {
+    let targetObject = null
+    if (event.target.closest('.surface__column')) {
+      this.tasks = this.tasks.map(column => this.task.closest('.surface__column').id === column.id ?
+        {
+          ...column, tasks: column.tasks.filter(item => {
+            if (item.id !== this.task.id) {
+              return item.id !== this.task.id
+            } else {
+              targetObject = item
+            }
+          })
+        } :
+        column
+      )
+
+      this.tasks = this.tasks.map(column => event.target.closest('.surface__column').id === column.id ?
+        { ...column, tasks: [...column.tasks, targetObject] } :
+        column
+      )
+      console.log(this.tasks);
+      this.printTasks(this.tasks)
+    }
+    document.removeEventListener('mouseover', this.eventOver)
+    // document.removeEventListener('mouseover', this.onMouseOver.bind(this))
   }
 }
 
-let trello = new Trello();
+let trello = new DND();
