@@ -31,7 +31,7 @@ class Trello {
       <input type="text" class="surface__add-column-input" placeholder="+ Add column" required>
     </form> 
     `
-
+    console.log(tasks);
     tasks.map(column => {
       const columnBox = document.createElement('div')
       columnBox.classList.add('surface__column')
@@ -73,7 +73,7 @@ class Trello {
       this.counterColumns++
       localStorage.setItem('counterColumns', JSON.stringify(this.counterColumns))
       this.printTasks(this.tasks)
-      console.log(this.tasks);
+
     }
   }
 
@@ -81,7 +81,7 @@ class Trello {
     if (e.target.closest('.head__close')) {
       this.tasks = this.tasks.filter(column => column.id !== e.target.closest('.surface__column').id)
       this.printTasks(this.tasks)
-      console.log(this.tasks);
+
     }
   }
 
@@ -97,7 +97,7 @@ class Trello {
         }
       })
       this.printTasks(this.tasks)
-      console.log(this.tasks);
+
     }
   }
 
@@ -138,76 +138,9 @@ class Trello {
         }
       })
       this.printTasks(this.tasks)
-      console.log(this.tasks);
+
     }
   }
-
-  // catchItem(e) {
-  //   if (e.target.closest('.task')) {
-  //     let task = e.target.closest('.task')
-  //     let background = document.createElement('div')
-  //     let shiftY = e.clientY - task.getBoundingClientRect().top;
-  //     let shiftX = e.clientX - task.getBoundingClientRect().left;
-
-  //     let onMouseMove = function (event) {
-  //       background.style.height = task.clientHeight + 'px'
-  //       background.style.width = task.clientWidth + 'px'
-  //       background.style.borderRadius = '3px'
-  //       background.style.backgroundColor = '#bfbfbf'
-  //       task.insertAdjacentElement('afterend', background)
-
-  //       task.style.position = 'absolute';
-  //       task.style.zIndex = 1000;
-  //       task.style.width = task.closest('.list').clientWidth + 'px'
-  //       task.style.top = event.pageY - shiftY + 'px';
-  //       task.style.left = event.pageX - shiftX + 'px';
-
-  //     }
-
-  //     function onMouseUp(event) {
-  //       document.removeEventListener('mousemove', onMouseMove);
-  //       if (background.clientHeight > 0) {
-  //         background.remove()
-  //         document.onmouseover = onMouseOver.bind(this)
-  //         task.style.position = 'relative';
-  //         task.style.top = 'auto'
-  //         task.style.left = 'auto'
-  //         task.style.zIndex = 'auto';
-
-  //         function onMouseOver(event) {
-  //           let targetObject = null
-  //           if (event.target.closest('.surface__column')) {
-  //             this.tasks = this.tasks.map(column => task.closest('.surface__column').id === column.id ?
-  //               {
-  //                 ...column, tasks: column.tasks.filter(item => {
-  //                   if (item.id !== task.id) {
-  //                     return item.id !== task.id
-  //                   } else {
-  //                     targetObject = item
-  //                   }
-  //                 })
-  //               } :
-  //               column
-  //             )
-
-  //             this.tasks = this.tasks.map(column => event.target.closest('.surface__column').id === column.id ?
-  //               { ...column, tasks: [...column.tasks, targetObject] } :
-  //               column
-  //             )
-
-  //             this.printTasks(this.tasks)
-  //           }
-  //           document.onmouseover = null
-  //         }
-  //       }
-
-  //       document.onmouseup = null
-  //     }
-
-  //     document.onmouseup = onMouseUp.bind(this)
-  //     document.addEventListener('mousemove', onMouseMove)
-  //   }
-  // }
 }
 
 class DND extends Trello {
@@ -237,10 +170,8 @@ class DND extends Trello {
 
       this.eventUp = this.onMouseUp.bind(this)
       document.addEventListener('mouseup', this.eventUp)
-      // document.addEventListener('mouseup', this.onMouseUp.bind(this))
       this.eventMove = this.onMouseMove.bind(this)
       document.addEventListener('mousemove', this.eventMove)
-      // document.addEventListener('mousemove', this.onMouseMove.bind(this))
     }
   }
 
@@ -261,12 +192,10 @@ class DND extends Trello {
 
   onMouseUp(event) {
     document.removeEventListener('mousemove', this.eventMove);
-    // document.removeEventListener('mousemove', this.onMouseMove.bind(this));
     if (this.background.clientHeight > 0) {
       this.background.remove()
       this.eventOver = this.onMouseOver.bind(this)
       document.addEventListener('mouseover', this.eventOver)
-      // document.addEventListener('mouseover', this.onMouseOver.bind(this))
       this.task.style.position = 'relative';
       this.task.style.top = 'auto'
       this.task.style.left = 'auto'
@@ -296,11 +225,10 @@ class DND extends Trello {
         { ...column, tasks: [...column.tasks, targetObject] } :
         column
       )
-      console.log(this.tasks);
+
       this.printTasks(this.tasks)
     }
     document.removeEventListener('mouseover', this.eventOver)
-    // document.removeEventListener('mouseover', this.onMouseOver.bind(this))
   }
 }
 
