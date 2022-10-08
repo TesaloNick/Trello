@@ -1,18 +1,13 @@
-
-
-
 class Trello {
   constructor() {
     this.surface = document.querySelector('.surface')
     this.formAddColumn = document.querySelector('.surface__add-column-form')
-    this.tasks = JSON.parse(localStorage.getItem('tasks')) || []
+    this.tasks = JSON.parse(localStorage.getItem('cards')) || []
     this.counterColumns = JSON.parse(localStorage.getItem('counterColumns')) || 0
-    // this.events()
   }
 
   events() {
     this.printTasks(this.tasks)
-    // this.surface.addEventListener('mousedown', (e) => this.catchItem(e))
     this.surface.addEventListener('submit', (e) => this.addTask(e))
     this.surface.addEventListener('click', (e) => {
       this.closeTask(e)
@@ -58,7 +53,7 @@ class Trello {
       document.querySelector('.surface__add-column-form').insertAdjacentElement('beforebegin', columnBox)
     })
 
-    localStorage.setItem('tasks', JSON.stringify(this.tasks))   // перезапись localStorage
+    localStorage.setItem('cards', JSON.stringify(this.tasks))   // перезапись localStorage
   }
 
   addColumn(e) {
@@ -97,7 +92,6 @@ class Trello {
         }
       })
       this.printTasks(this.tasks)
-
     }
   }
 
@@ -114,7 +108,7 @@ class Trello {
       )
 
       this.printTasks(this.tasks)
-      localStorage.setItem('tasks', JSON.stringify(this.tasks))
+      localStorage.setItem('cards', JSON.stringify(this.tasks))
     }
   }
 
@@ -232,4 +226,4 @@ class DND extends Trello {
   }
 }
 
-let trello = new DND();
+new DND();
